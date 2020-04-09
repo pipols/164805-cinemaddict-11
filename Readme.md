@@ -1,7 +1,7 @@
 # Личный проект «Киноман» [![Build status][travis-image]][travis-url]
 
 * Студент: [Максим Дурандин](https://up.htmlacademy.ru/ecmascript/11/user/164805).
-* Наставник: `Неизвестно`.
+* Наставник: [Максим Дурандин](https://up.htmlacademy.ru/ecmascript/11/user/164805).
 
 ---
 
