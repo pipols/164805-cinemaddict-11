@@ -1,7 +1,8 @@
 import {reformatDate} from "../utils/date";
 import {reformatRuntime} from "../utils/film";
+import {createElement} from "../utils/render";
 
-export const createFilmCardTemplate = ({filmInfo, comments}) => {
+const createFilmCardTemplate = ({filmInfo, comments}) => {
   const {title, totalRating, release, runtime, genre, poster, description} = filmInfo;
 
   return (`<article class="film-card">
@@ -22,3 +23,22 @@ export const createFilmCardTemplate = ({filmInfo, comments}) => {
     </form>
   </article>`);
 };
+
+export default class FilmCard {
+  constructor(movie) {
+    this._element = null;
+    this._movie = movie;
+  }
+
+  getTemplate() {
+    return createFilmCardTemplate(this._movie);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+}

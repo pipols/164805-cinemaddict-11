@@ -1,10 +1,10 @@
-import {createProfileTemplate} from "./components/profile";
-import {createMainNavigationTemplate} from "./components/main-navigation";
-import {createFilmCardTemplate} from "./components/film-card";
-import {createShowMoreTemplate} from "./components/show-more";
+import Profile from "./components/profile";
+import MainNavigation from "./components/main-navigation";
+import FilmCard from "./components/film-card";
+import ShowMore from "./components/show-more";
 // import {createExtraFilmsTemplate} from "./components/extra-film";
 // import {createFilmDetailsTemplate} from "./components/film-details";
-import {createFilmsTemplate} from "./components/films";
+import Films from "./components/films";
 
 import {render} from "./utils/render";
 import {Movies} from "./mock/film";
@@ -15,22 +15,25 @@ const CardCount = {
 };
 
 let showingCard = CardCount.start;
+const profile = new Profile();
+const mainNavigation = new MainNavigation();
+const films = new Films();
+const filmCard = new FilmCard();
 
 const siteHeaderElement = document.querySelector(`header`);
 const siteMainElement = document.querySelector(`main`);
+render(siteHeaderElement, profile);
 
-render(siteHeaderElement, createProfileTemplate());
-
-render(siteMainElement, createMainNavigationTemplate());
-render(siteMainElement, createFilmsTemplate());
+render(siteMainElement, mainNavigation);
+render(siteMainElement, films);
 
 const filmsListElement = siteMainElement.querySelector(`.films-list`);
 const filmsContainerElement = siteMainElement.querySelector(`.films-list__container`);
 
-const filmsTemplate = Movies.slice(0, CardCount.start).map((movie) => createFilmCardTemplate(movie)).join(``);
+const filmsTemplate = Movies.slice(0, CardCount.start).map((movie) => filmCard(movie)).join(``);
 render(filmsContainerElement, filmsTemplate);
 
-render(filmsListElement, createShowMoreTemplate());
+render(filmsListElement, new ShowMore());
 
 const showMore = filmsListElement.querySelector(`.films-list__show-more`);
 showMore.addEventListener(`click`, (evt) => {
@@ -38,8 +41,8 @@ showMore.addEventListener(`click`, (evt) => {
   const prevFilmCount = showingCard;
   showingCard += CardCount.step;
 
-  const films = Movies.slice(prevFilmCount, showingCard).map((movie) => createFilmCardTemplate(movie)).join(``);
-  render(filmsContainerElement, films);
+  const filmsTemp = Movies.slice(prevFilmCount, showingCard).map((movie) => filmCard(movie)).join(``);
+  render(filmsContainerElement, filmsTemp);
 
   if (showingCard >= Movies.length) {
     showMore.remove();

@@ -1,4 +1,6 @@
-export const createFilmDetailsTemplate = () => {
+import {createElement} from "../utils/render";
+
+const createFilmDetailsTemplate = () => {
   return (`<section class="film-details">
     <form class="film-details__inner" action="" method="get">
       <div class="form-details__top-container">
@@ -169,3 +171,21 @@ export const createFilmDetailsTemplate = () => {
     </form>
   </section>`);
 };
+
+export default class FilmDetails {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmDetailsTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+}
