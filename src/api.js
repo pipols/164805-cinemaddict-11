@@ -44,7 +44,7 @@ export default class API {
     .then((response) => response.json())
     .then(CommentAdapter.parseComments);
   }
-  // body: JSON.stringify(data.toRAW), !!!!!
+
   createComment(filmId, data) {
     return this._load({
       url: `comments/${filmId}`,
