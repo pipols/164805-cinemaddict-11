@@ -7,14 +7,6 @@ import {extend} from '../utils/common';
 import {KeyCode} from '../const';
 
 const siteBodyElement = document.querySelector(`body`);
-// const ACTIVE_BUTTON = `film-card__controls-item--active`;
-
-//
-// const Filter = {
-//   watchlist: `isWatchlist`,
-//   watched: `isWatched`,
-//   favorite: `isFavorite`
-// };
 
 export default class MovieController {
   constructor(container, onDataChange, onViewChange, api) {
@@ -42,6 +34,8 @@ export default class MovieController {
     this._card = card;
     this._cardComponent = new CardComponent(card);
     this._filmDetailsComponent = new FilmDetailsComponent(card);
+
+    this._isCommentsRender = false;
 
     this._cardComponent.setCardPosterClickHandler(this._cardClickHandler);
     this._cardComponent.setCardTitleClickHandler(this._cardClickHandler);
@@ -108,10 +102,6 @@ export default class MovieController {
     this._loadComments();
   }
 
-  updateCard() {
-
-  }
-
   destroy() {
     remove(this._cardComponent);
     this._removePopup();
@@ -120,6 +110,7 @@ export default class MovieController {
   _removePopup() {
     remove(this._filmDetailsComponent);
     document.removeEventListener(`keydown`, this._escKeydownHandler);
+    this._isCommentsRender = false;
   }
 
   _closeButtonClickHandler() {
@@ -136,13 +127,17 @@ export default class MovieController {
     render(siteBodyElement, this._filmDetailsComponent);
     document.addEventListener(`keydown`, this._escKeydownHandler);
     this._filmDetailsComponent.recoveryListeners();
+    if (!this._isCommentsRender) {
+      this._renderComments(this._card.comments);
+    }
   }
 
   _loadComments() {
     this._api.getComment(this._card.id)
       .then((comments) => {
         this._card.comments = comments;
-        this._renderComments(comments);
+        this._isCommentsRender = true;
+        this._renderComments(this._card.comments);
       });
   }
 
@@ -150,11 +145,10 @@ export default class MovieController {
     this._renderPopup();
   }
 
-  _deleteCommentButtonHandler(commentId, component) {
+  _deleteCommentButtonHandler(commentId) {
     this._api.deleteComment(commentId)
       .then(() => {
         this._card.comments = this._card.comments.filter((comment) => comment.id !== commentId);
-        remove(component);
         this._onDataChange(this, this._card, this._card);
       });
   }

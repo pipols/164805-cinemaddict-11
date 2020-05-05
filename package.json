@@ -12,17 +12,18 @@
   "devDependencies": {
     "eslint": "6.1.0",
     "eslint-config-htmlacademy": "0.5.2",
-    "webpack": "4.42.1",
-    "webpack-cli": "3.3.11"
+    "moment-locales-webpack-plugin": "1.1.2",
+    "webpack": "4.41.2",
+    "webpack-cli": "3.3.10",
+    "webpack-dev-server": "3.9.0"
   },
   "engines": {
     "node": "10"
   },
   "dependencies": {
-    "camelcase-keys": "^6.2.2",
-    "lodash": "^4.17.15",
-    "moment": "^2.24.0",
-    "moment-locales-webpack-plugin": "^1.2.0",
-    "webpack-dev-server": "3.10.3"
+    "chart.js": "2.9.3",
+    "chartjs-plugin-datalabels": "0.7.0",
+    "moment": "2.24.0",
+    "moment-duration-format": "2.3.2"
   }
 }
