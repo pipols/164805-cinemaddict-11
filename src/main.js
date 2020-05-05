@@ -1,48 +1,51 @@
-import {createProfileTemplate} from "./components/profile";
-import {createMainNavigationTemplate} from "./components/main-navigation";
-import {createFilmCardTemplate} from "./components/film-card";
-import {createShowMoreTemplate} from "./components/show-more";
-// import {createExtraFilmsTemplate} from "./components/extra-film";
-// import {createFilmDetailsTemplate} from "./components/film-details";
-import {createFilmsTemplate} from "./components/films";
+import PageController from './controllers/page-controller';
+import FilterController from './controllers/filter-controller';
+import SortController from './controllers/sort-controller';
+import StatisticController from './controllers/statistic-controller';
+import MoviesModel from './models/movies';
+import API from './api';
 
-import {render} from "./utils/render";
-import {Movies} from "./mock/film";
 
-const CardCount = {
-  start: 5,
-  step: 5
+const TOKEN = `Basic er883jdlkvzbddsaqw`;
+const API_URL = `https://11.ecmascript.pages.academy/cinemaddict`;
+
+const siteMainElement = document.querySelector(`main`);
+const api = new API(API_URL, TOKEN);
+const moviesModel = new MoviesModel();
+
+const pageController = new PageController(siteMainElement, moviesModel, api);
+const filterController = new FilterController(siteMainElement, moviesModel);
+const sortController = new SortController(siteMainElement, moviesModel);
+const statisticController = new StatisticController(siteMainElement, moviesModel);
+
+const renderPage = () => {
+  filterController.render();
+  sortController.render();
+  pageController.render();
+  statisticController.render();
+
+  const filterComponent = filterController.getFilterComponent();
+
+  filterComponent.setFilterChangeHandler((filter) => {
+    if (!filter) {
+      pageController.hide();
+      sortController.hide();
+      statisticController.show();
+    } else {
+      pageController.show();
+      sortController.show();
+      statisticController.hide();
+    }
+  });
 };
 
-let showingCard = CardCount.start;
+api.getMovies()
+  .then((movies) => {
+    moviesModel.setCards(movies);
+    renderPage();
+  });
 
-const siteHeaderElement = document.querySelector(`header`);
-const siteMainElement = document.querySelector(`main`);
-
-render(siteHeaderElement, createProfileTemplate());
-
-render(siteMainElement, createMainNavigationTemplate());
-render(siteMainElement, createFilmsTemplate());
-
-const filmsListElement = siteMainElement.querySelector(`.films-list`);
-const filmsContainerElement = siteMainElement.querySelector(`.films-list__container`);
-
-const filmsTemplate = Movies.slice(0, CardCount.start).map((movie) => createFilmCardTemplate(movie)).join(``);
-render(filmsContainerElement, filmsTemplate);
-
-render(filmsListElement, createShowMoreTemplate());
-
-const showMore = filmsListElement.querySelector(`.films-list__show-more`);
-showMore.addEventListener(`click`, (evt) => {
-  evt.preventDefault();
-  const prevFilmCount = showingCard;
-  showingCard += CardCount.step;
-
-  const films = Movies.slice(prevFilmCount, showingCard).map((movie) => createFilmCardTemplate(movie)).join(``);
-  render(filmsContainerElement, films);
-
-  if (showingCard >= Movies.length) {
-    showMore.remove();
-  }
-
-});
+// починить RAW в адаптерах
+// сделать компонент(контроллер?) комментариев
+// а нужен ли _onViewChange?
+// починить releaseDate в MovieAdapter
