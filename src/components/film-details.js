@@ -2,12 +2,6 @@ import {getFormattedTime, TimeToken, getFilmDuration} from '../utils/common';
 import AbstractSmartComponent from './abstract-smart-component';
 
 const EMOGIS = [`smile`, `sleeping`, `puke`, `angry`];
-// const Filter = {
-//   watchlist: `isWatchlist`,
-//   watched: `isWatched`,
-//   favorite: `isFavorite`
-// };
-// префикс в константы
 const EMOJI_SRC_PREFIX = `./images/emoji/`;
 
 const Emoji = {
