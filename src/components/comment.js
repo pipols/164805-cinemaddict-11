@@ -42,7 +42,7 @@ export default class Comment extends AbstractComponent {
       .querySelector(`.film-details__comment-delete`)
       .addEventListener(`click`, (evt) => {
         evt.preventDefault();
-        handler(this._comment.id, this);
+        handler(this._comment.id);
       });
   }
 }
