@@ -1,6 +1,5 @@
 import MovieAdapter from './adapters/movie';
 import CommentAdapter from './adapters/comment';
-// import {extend} from './utils/common';
 
 const Method = {
   GET: `GET`,
