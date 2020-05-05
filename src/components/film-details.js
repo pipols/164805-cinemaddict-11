@@ -1,7 +1,6 @@
 import {getFormattedTime, TimeToken, getFilmDuration} from '../utils/common';
 import AbstractSmartComponent from './abstract-smart-component';
 
-const MAX_USER_RATING = 9;
 const EMOGIS = [`smile`, `sleeping`, `puke`, `angry`];
 // const Filter = {
 //   watchlist: `isWatchlist`,
@@ -29,12 +28,6 @@ const createfilmsGenre = (genre) => {
   return `<span class="film-details__genre">${genre}</span>`;
 };
 
-const createUserRatingScoreMarkup = (num) => {
-  return (
-    `<input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="${num}" id="rating-${num}">
-     <label class="film-details__user-rating-label" for="rating-${num}">${num}</label>`);
-};
-
 const createEmojiListMarkup = (emoji) => {
   return (
     `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value="${emoji}">
@@ -45,33 +38,6 @@ const createEmojiListMarkup = (emoji) => {
 
 const createUserEmojiMarkup = (emoji) => {
   return `<img src="${EMOJI_SRC_PREFIX}${emojiImg[emoji]}" width="55" height="55" alt="emoji">`;
-};
-
-const createRatingMarkup = (poster, title) => {
-  return `<div class="form-details__middle-container">
-    <section class="film-details__user-rating-wrap">
-      <div class="film-details__user-rating-controls">
-        <button class="film-details__watched-reset" type="button">Undo</button>
-      </div>
-
-      <div class="film-details__user-score">
-        <div class="film-details__user-rating-poster">
-          <img src="./${poster}" alt="${title}" class="film-details__user-rating-img">
-        </div>
-
-        <section class="film-details__user-rating-inner">
-          <h3 class="film-details__user-rating-title">${title}</h3>
-
-          <p class="film-details__user-rating-feelings">How you feel it?</p>
-
-          <div class="film-details__user-rating-score">
-            ${Array(MAX_USER_RATING).fill(``).map((elem, i) => createUserRatingScoreMarkup(i + 1)).join(``)}
-          </div>
-        </section>
-      </div>
-    </section>
-  </div>
-`;
 };
 
 const createFilmDetailsElement = (card) => {
@@ -168,7 +134,6 @@ const createFilmDetailsElement = (card) => {
         </section>
       </div>
 
-      ${isWatched ? createRatingMarkup(poster, title) : ``}
 
       <div class="form-details__bottom-container">
         <section class="film-details__comments-wrap">
