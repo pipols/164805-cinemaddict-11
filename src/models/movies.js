@@ -51,7 +51,7 @@ export default class Movies {
   getMostCommentedCards() {
     const cards = this._cards;
 
-    if (cards.every((card) => card.comments.length === 0)) {
+    if (cards.every((card) => card.commentsId.length === 0)) {
       return [];
     } else if (isSameCountComments(cards)) {
       return shuffleArray(cards).slice(0, CardCount.MOST_COMMENTED_FILM);
