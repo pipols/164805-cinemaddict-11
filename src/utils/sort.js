@@ -14,4 +14,4 @@ export const getCardsBySortType = (cards, sortType) => {
 
 export const sortRatedCards = (cards) => [...cards].sort((a, b) => b.rate - a.rate);
 
-export const sortMostCommentedCards = (cards) => [...cards].sort((a, b) => b.comments.length - a.comments.length);
+export const sortMostCommentedCards = (cards) => [...cards].sort((a, b) => b.commentsId.length - a.commentsId.length);
