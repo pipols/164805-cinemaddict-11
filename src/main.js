@@ -45,7 +45,6 @@ api.getMovies()
     renderPage();
   });
 
-// починить RAW в адаптерах
 // сделать компонент(контроллер?) комментариев
 // а нужен ли _onViewChange?
 // починить releaseDate в MovieAdapter
