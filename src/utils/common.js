@@ -80,6 +80,6 @@ export const shuffleArray = ([...array]) => {
 
 export const isSameValues = (array, key) => array.every((it) => it[key] === array[0][key]);
 
-export const isSameCountComments = (cards) => cards.every((card) => card.comments.length === cards[0].comments.length);
+export const isSameCountComments = (cards) => cards.every((card) => card.commentsId.length === cards[0].commentsId.length);
 
 export const extend = (a, b) => Object.assign({}, a, b);
