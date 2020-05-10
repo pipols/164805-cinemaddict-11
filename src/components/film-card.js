@@ -1,4 +1,4 @@
-import {getLimitString, getFilmDuration} from '../utils/common';
+import {getLimitString, getFilmDuration, TimeToken, getFormattedTime} from '../utils/common';
 import AbstractSmartComponent from './abstract-smart-component';
 
 const MAX_LENGTH_DESCRIPTION = 139;
@@ -13,7 +13,7 @@ const createFilmCardElement = (card) => {
         <h3 class="film-card__title">${title}</h3>
         <p class="film-card__rating">${rate}</p>
         <p class="film-card__info">
-          <span class="film-card__year">${releaseDate}</span>
+          <span class="film-card__year">${getFormattedTime(releaseDate, TimeToken.YEAR)}</span>
           <span class="film-card__duration">${getFilmDuration(duration)}</span>
           <span class="film-card__genre">${genre[0]}</span>
         </p>
