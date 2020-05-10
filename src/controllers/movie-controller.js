@@ -5,6 +5,7 @@ import MovieAdapter from '../adapters/movie';
 import {render, replace, remove} from '../utils/render';
 // import {extend} from '../utils/common';
 import {KeyCode} from '../const';
+import {encode} from 'he';
 
 const SHAKE_ANIMATION_TIMEOUT = 600;
 const siteBodyElement = document.querySelector(`body`);
@@ -14,7 +15,7 @@ const parseFormData = (formData) => {
   const emoji = formData.get(`comment-emoji`);
 
   const newComment = {
-    "comment": comment,
+    "comment": encode(comment),
     "date": new Date().toISOString(),
     "emotion": emoji,
   };
