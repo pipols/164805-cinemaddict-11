@@ -3,16 +3,30 @@ import FilmDetailsComponent from '../components/film-details';
 import CommentComponent from '../components/comment';
 import MovieAdapter from '../adapters/movie';
 import {render, replace, remove} from '../utils/render';
-import {extend} from '../utils/common';
+// import {extend} from '../utils/common';
 import {KeyCode} from '../const';
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
 const siteBodyElement = document.querySelector(`body`);
 
+const parseFormData = (formData) => {
+  const comment = formData.get(`comment`);
+  const emoji = formData.get(`comment-emoji`);
+
+  const newComment = {
+    "comment": comment,
+    "date": new Date().toISOString(),
+    "emotion": emoji,
+  };
+  return newComment;
+};
+
 export default class MovieController {
-  constructor(container, onDataChange, onViewChange, api) {
+  constructor(container, onDataChange, onViewChange, onCommentChange, api) {
     this._container = container;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
+    this._onCommentChange = onCommentChange;
     this._api = api;
 
     this._card = [];
@@ -25,6 +39,7 @@ export default class MovieController {
     this._cardClickHandler = this._cardClickHandler.bind(this);
     this._deleteCommentButtonHandler = this._deleteCommentButtonHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    // this.shake = this.shake.bind(this);
   }
 
   render(card) {
@@ -113,6 +128,14 @@ export default class MovieController {
     this._isCommentsRender = false;
   }
 
+  _renderPopup() {
+    render(siteBodyElement, this._filmDetailsComponent);
+    document.addEventListener(`keydown`, this._escKeydownHandler);
+    if (!this._isCommentsRender) {
+      this._renderComments(this._card.comments);
+    }
+  }
+
   _closeButtonClickHandler() {
     this._removePopup();
   }
@@ -120,15 +143,6 @@ export default class MovieController {
   _escKeydownHandler(evt) {
     if (evt.keyCode === KeyCode.ESC) {
       this._removePopup();
-    }
-  }
-
-  _renderPopup() {
-    render(siteBodyElement, this._filmDetailsComponent);
-    document.addEventListener(`keydown`, this._escKeydownHandler);
-    this._filmDetailsComponent.recoveryListeners();
-    if (!this._isCommentsRender) {
-      this._renderComments(this._card.comments);
     }
   }
 
@@ -145,29 +159,34 @@ export default class MovieController {
     this._renderPopup();
   }
 
-  _deleteCommentButtonHandler(commentId) {
+  _deleteCommentButtonHandler(commentId, commentComponent) {
+    commentComponent.setData({
+      deleteButtonText: `Deleting…`,
+      deleteButtonDisabled: `disabled`
+    });
+
     this._api.deleteComment(commentId)
       .then(() => {
         this._card.comments = this._card.comments.filter((comment) => comment.id !== commentId);
         this._onDataChange(this, this._card, this._card);
+      })
+      .catch(() => {
+        this.shake();
+        commentComponent.setData({
+          deleteButtonText: `Delete`,
+        });
       });
   }
 
-  _formSubmitHandler(evt) {
+  _formSubmitHandler(evt, card) {
+    this._filmDetailsComponent.deleteCommentFieldError();
+
     if ((evt.ctrlKey || evt.metaKey) && evt.key === KeyCode.ENTER) {
-      const data = new FormData(evt.target.form);
+      const formData = this._filmDetailsComponent.getData();
+      const newComment = parseFormData(formData);
 
-      const comment = data.get(`comment`);
-      const emoji = data.get(`comment-emoji`);
-
-      const newComment = {
-        emotion: emoji,
-        commentText: comment,
-        author: `John Doe`,
-        date: new Date()
-      };
-
-      this._onDataChange(this, this._card, extend(this._card, this._card.comments.unshift(newComment))); //
+      this._filmDetailsComponent.setFormLock();
+      this._onCommentChange(this, card, newComment);
     }
   }
 
@@ -178,6 +197,30 @@ export default class MovieController {
       commentComponent.setDeleteCommentButtonHandler(this._deleteCommentButtonHandler);
       render(container, commentComponent);
     });
+  }
+
+  commentSendingError() {
+    this.shake();
+    this._filmDetailsComponent.setFormUnlock();
+    this._filmDetailsComponent.setCommentFieldError();
+  }
+
+  shake() {
+    this._filmDetailsComponent.getElement().classList.add(`shake`);
+    this._cardComponent.getElement().classList.add(`shake`);
+
+    // const position = this._filmDetailsComponent.getElement().scrollTop;
+    // console.log(position);
+    setTimeout(() => {
+      this._filmDetailsComponent.getElement().classList.remove(`shake`);
+      this._cardComponent.getElement().classList.remove(`shake`);
+      // this._filmDetailsComponent.getElement().scrollTo(0, position);
+      // window.scrollTo(0, 200);
+      // this._taskEditComponent.setData({
+      //   saveButtonText: `Save`,
+      //   deleteButtonText: `Delete`,
+      // });
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 
 }

@@ -48,10 +48,14 @@ export default class API {
     return this._load({
       url: `comments/${filmId}`,
       method: Method.POST,
-      body: JSON.stringify(data.toRAW),
+      body: JSON.stringify(data),
       headers: new Headers({'Content-Type': `application/json`})})
         .then((response) => response.json())
-        .then(CommentAdapter.parseComments);
+        .then((movie) => {
+          const film = MovieAdapter.parseMovie(movie.movie);
+          film.comments = CommentAdapter.parseComments(movie.comments);
+          return film;
+        });
   }
 
   deleteComment(commentId) {

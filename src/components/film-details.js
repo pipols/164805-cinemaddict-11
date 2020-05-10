@@ -166,6 +166,9 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._closeButtonClickHandler = null;
     this._escKeydownHandler = null;
     this._formChangeHandler = null;
+
+    // this._externalData = DefaultData;
+    this.commentField = this.getElement().querySelector(`.film-details__comment-input`);
   }
 
   getTemplate() {
@@ -217,7 +220,38 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._formChangeHandler = handler;
     this.getElement()
       .querySelector(`.film-details__inner`)
-      .addEventListener(`keydown`, handler);
+      .addEventListener(`keydown`, (evt) => {
+        handler(evt, this._card);
+      });
+  }
+
+  getData() {
+    const form = this.getElement().querySelector(`.film-details__inner`);
+    return new FormData(form);
+  }
+
+  setFormLock() {
+    this.getElement()
+      .querySelectorAll(`.film-details__emoji-item`)
+      .forEach((elem) => elem.setAttribute(`disabled`, `disabled`));
+
+    this.commentField.setAttribute(`disabled`, `disabled`);
+  }
+
+  setFormUnlock() {
+    this.getElement()
+      .querySelectorAll(`.film-details__emoji-item`)
+      .forEach((elem) => elem.removeAttribute(`disabled`, `disabled`));
+
+    this.commentField.removeAttribute(`disabled`, `disabled`);
+  }
+
+  setCommentFieldError() {
+    this.commentField.style.border = `1px solid red`;
+  }
+
+  deleteCommentFieldError() {
+    this.commentField.style.border = `1px solid #979797`;
   }
 
   recoveryListeners() {

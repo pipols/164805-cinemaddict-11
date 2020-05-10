@@ -34,6 +34,7 @@ export default class PageController {
     this._loadMoreClickHandler = this._loadMoreClickHandler.bind(this);
     this._filterChangeHandler = this._filterChangeHandler.bind(this);
     this._sortChangeHandler = this._sortChangeHandler.bind(this);
+    this._commentChangeHandler = this._commentChangeHandler.bind(this);
 
     this._showedCardControllers = [];
     this._showedExtraCardControllers = [];
@@ -106,7 +107,7 @@ export default class PageController {
 
   _renderCards(container, cards) {
     return cards.map((card) => {
-      const movieController = new MovieController(container, this._dataChangeHandler, this._viewChangeHandler, this._api);
+      const movieController = new MovieController(container, this._dataChangeHandler, this._viewChangeHandler, this._commentChangeHandler, this._api);
       movieController.render(card);
 
       return movieController;
@@ -121,7 +122,18 @@ export default class PageController {
     this._showedExtraCardControllers = [];
   }
 
+  _commentChangeHandler(movieController, card, newComment) {
+    this._api.createComment(card.id, newComment)
+      .then((newCard) => {
+        this._dataChangeHandler(movieController, card, newCard);
+      })
+      .catch(() => {
+        movieController.commentSendingError();
+      });
+  }
+
   _dataChangeHandler(movieController, oldData, newData) {
+    console.log(`_dataChangeHandler`);
     this._api.updateMovie(newData)
       .then((movie) => {
         const isSuccess = this._moviesModel.updateCard(oldData.id, movie);
