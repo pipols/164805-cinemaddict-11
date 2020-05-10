@@ -22,11 +22,12 @@ const parseFormData = (formData) => {
 };
 
 export default class MovieController {
-  constructor(container, onDataChange, onViewChange, onCommentChange, api) {
+  constructor(container, onDataChange, onViewChange, onCommentChange, onOpenedPopup, api) {
     this._container = container;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
     this._onCommentChange = onCommentChange;
+    this._onOpenedPopup = onOpenedPopup;
     this._api = api;
 
     this._card = [];
@@ -119,16 +120,18 @@ export default class MovieController {
 
   destroy() {
     remove(this._cardComponent);
-    this._removePopup();
+    this.removePopup();
   }
 
-  _removePopup() {
+  removePopup() {
     remove(this._filmDetailsComponent);
     document.removeEventListener(`keydown`, this._escKeydownHandler);
     this._isCommentsRender = false;
   }
 
   _renderPopup() {
+    this._onOpenedPopup(this);
+
     render(siteBodyElement, this._filmDetailsComponent);
     document.addEventListener(`keydown`, this._escKeydownHandler);
     if (!this._isCommentsRender) {
@@ -137,12 +140,12 @@ export default class MovieController {
   }
 
   _closeButtonClickHandler() {
-    this._removePopup();
+    this.removePopup();
   }
 
   _escKeydownHandler(evt) {
     if (evt.keyCode === KeyCode.ESC) {
-      this._removePopup();
+      this.removePopup();
     }
   }
 

@@ -35,10 +35,12 @@ export default class PageController {
     this._filterChangeHandler = this._filterChangeHandler.bind(this);
     this._sortChangeHandler = this._sortChangeHandler.bind(this);
     this._commentChangeHandler = this._commentChangeHandler.bind(this);
+    this._popupOpenHandler = this._popupOpenHandler.bind(this);
 
     this._showedCardControllers = [];
     this._showedExtraCardControllers = [];
     this._prevCardsCount = 0;
+    this._openedPopup = null;
 
     this._showingMainFilmsCount = CardCount.MAIN_FILM;
     this._oldDetailsComponent = null;
@@ -107,7 +109,7 @@ export default class PageController {
 
   _renderCards(container, cards) {
     return cards.map((card) => {
-      const movieController = new MovieController(container, this._dataChangeHandler, this._viewChangeHandler, this._commentChangeHandler, this._api);
+      const movieController = new MovieController(container, this._dataChangeHandler, this._viewChangeHandler, this._commentChangeHandler, this._popupOpenHandler, this._api);
       movieController.render(card);
 
       return movieController;
@@ -133,7 +135,6 @@ export default class PageController {
   }
 
   _dataChangeHandler(movieController, oldData, newData) {
-    console.log(`_dataChangeHandler`);
     this._api.updateMovie(newData)
       .then((movie) => {
         const isSuccess = this._moviesModel.updateCard(oldData.id, movie);
@@ -173,6 +174,13 @@ export default class PageController {
 
     this._renderMainCards();
     this._renderLoadMoreButton();
+  }
+
+  _popupOpenHandler(movieComponent) {
+    if (this._openedPopup) {
+      this._openedPopup.removePopup();
+    }
+    this._openedPopup = movieComponent;
   }
 
   _renderTopRatedFilms() {
