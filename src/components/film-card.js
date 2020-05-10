@@ -15,7 +15,7 @@ const createFilmCardElement = (card) => {
         <p class="film-card__info">
           <span class="film-card__year">${getFormattedTime(releaseDate, TimeToken.YEAR)}</span>
           <span class="film-card__duration">${getFilmDuration(duration)}</span>
-          <span class="film-card__genre">${genre[0]}</span>
+          <span class="film-card__genre">${genre.length ? genre[0] : ``}</span>
         </p>
         <img src="./${poster}" alt="${title}" class="film-card__poster">
         <p class="film-card__description">${getLimitDescription}</p>
