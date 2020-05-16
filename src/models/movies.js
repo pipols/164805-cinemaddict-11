@@ -14,11 +14,10 @@ export default class Movies {
     this._dataChangeHandlers = [];
     this._sortChangeHandlers = [];
   }
-  // ?
+
   loadCards(cb) {
     this._api.getMovies()
       .then((movies) => {
-        console.log(`loadCards`, movies);
         this.setCards(movies);
         cb();
       });
