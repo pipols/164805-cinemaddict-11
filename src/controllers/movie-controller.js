@@ -3,16 +3,31 @@ import FilmDetailsComponent from '../components/film-details';
 import CommentComponent from '../components/comment';
 import MovieAdapter from '../adapters/movie';
 import {render, replace, remove} from '../utils/render';
-import {extend} from '../utils/common';
 import {KeyCode} from '../const';
+import {encode} from 'he';
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
 const siteBodyElement = document.querySelector(`body`);
 
+const parseFormData = (formData) => {
+  const comment = formData.get(`comment`);
+  const emoji = formData.get(`comment-emoji`);
+
+  const newComment = {
+    "comment": encode(comment),
+    "date": new Date().toISOString(),
+    "emotion": emoji,
+  };
+  return newComment;
+};
+
 export default class MovieController {
-  constructor(container, onDataChange, onViewChange, api) {
+  constructor(container, onDataChange, onViewChange, onCommentChange, onOpenedPopup, api) {
     this._container = container;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
+    this._onCommentChange = onCommentChange;
+    this._onOpenedPopup = onOpenedPopup;
     this._api = api;
 
     this._card = [];
@@ -41,7 +56,8 @@ export default class MovieController {
     this._cardComponent.setCardTitleClickHandler(this._cardClickHandler);
     this._cardComponent.setCardCommentsClickHandler(this._cardClickHandler);
 
-    this._cardComponent.setWatchlistButtonClickHandler(() => {
+    this._cardComponent.setWatchlistButtonClickHandler((evt) => {
+      evt.preventDefault();
       const newCard = MovieAdapter.clone(this._card);
       newCard.isWatchlist = !newCard.isWatchlist;
 
@@ -64,7 +80,8 @@ export default class MovieController {
       this._onDataChange(this, this._card, newCard);
     });
 
-    this._filmDetailsComponent.setWatchlistChangeHandler(() => {
+    this._filmDetailsComponent.setWatchlistChangeHandler((evt) => {
+      evt.preventDefault();
       const newCard = MovieAdapter.clone(this._card);
       newCard.isWatchlist = !newCard.isWatchlist;
 
@@ -104,31 +121,32 @@ export default class MovieController {
 
   destroy() {
     remove(this._cardComponent);
-    this._removePopup();
+    this.removePopup();
   }
 
-  _removePopup() {
+  removePopup() {
     remove(this._filmDetailsComponent);
     document.removeEventListener(`keydown`, this._escKeydownHandler);
     this._isCommentsRender = false;
   }
 
+  _renderPopup() {
+    this._onOpenedPopup(this);
+
+    render(siteBodyElement, this._filmDetailsComponent);
+    document.addEventListener(`keydown`, this._escKeydownHandler);
+    if (!this._isCommentsRender) {
+      this._renderComments(this._card.comments);
+    }
+  }
+
   _closeButtonClickHandler() {
-    this._removePopup();
+    this.removePopup();
   }
 
   _escKeydownHandler(evt) {
     if (evt.keyCode === KeyCode.ESC) {
-      this._removePopup();
-    }
-  }
-
-  _renderPopup() {
-    render(siteBodyElement, this._filmDetailsComponent);
-    document.addEventListener(`keydown`, this._escKeydownHandler);
-    this._filmDetailsComponent.recoveryListeners();
-    if (!this._isCommentsRender) {
-      this._renderComments(this._card.comments);
+      this.removePopup();
     }
   }
 
@@ -145,29 +163,34 @@ export default class MovieController {
     this._renderPopup();
   }
 
-  _deleteCommentButtonHandler(commentId) {
+  _deleteCommentButtonHandler(commentId, commentComponent) {
+    commentComponent.setData({
+      deleteButtonText: `Deleting…`,
+      deleteButtonDisabled: `disabled`
+    });
+
     this._api.deleteComment(commentId)
       .then(() => {
         this._card.comments = this._card.comments.filter((comment) => comment.id !== commentId);
         this._onDataChange(this, this._card, this._card);
+      })
+      .catch(() => {
+        this.shake();
+        commentComponent.setData({
+          deleteButtonText: `Delete`,
+        });
       });
   }
 
-  _formSubmitHandler(evt) {
+  _formSubmitHandler(evt, card) {
+    this._filmDetailsComponent.deleteCommentFieldError();
+
     if ((evt.ctrlKey || evt.metaKey) && evt.key === KeyCode.ENTER) {
-      const data = new FormData(evt.target.form);
+      const formData = this._filmDetailsComponent.getData();
+      const newComment = parseFormData(formData);
 
-      const comment = data.get(`comment`);
-      const emoji = data.get(`comment-emoji`);
-
-      const newComment = {
-        emotion: emoji,
-        commentText: comment,
-        author: `John Doe`,
-        date: new Date()
-      };
-
-      this._onDataChange(this, this._card, extend(this._card, this._card.comments.unshift(newComment))); //
+      this._filmDetailsComponent.setFormLock();
+      this._onCommentChange(this, card, newComment);
     }
   }
 
@@ -178,6 +201,22 @@ export default class MovieController {
       commentComponent.setDeleteCommentButtonHandler(this._deleteCommentButtonHandler);
       render(container, commentComponent);
     });
+  }
+
+  commentSendingError() {
+    this.shake();
+    this._filmDetailsComponent.setFormUnlock();
+    this._filmDetailsComponent.setCommentFieldError();
+  }
+
+  shake() {
+    this._filmDetailsComponent.getElement().classList.add(`shake`);
+    this._cardComponent.getElement().classList.add(`shake`);
+
+    setTimeout(() => {
+      this._filmDetailsComponent.getElement().classList.remove(`shake`);
+      this._cardComponent.getElement().classList.remove(`shake`);
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 
 }

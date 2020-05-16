@@ -4,7 +4,6 @@ import MainFilmsComponent from '../components/main-films';
 import ExtraFilmsComponent from '../components/extra-films';
 import FooterStatisticComponent from '../components/footer-statistic';
 import LoadMoreButtonComponent from '../components/load-more-button';
-// import StatisticComponent from '../components/statistic';
 
 import MovieController from './movie-controller';
 
@@ -34,10 +33,13 @@ export default class PageController {
     this._loadMoreClickHandler = this._loadMoreClickHandler.bind(this);
     this._filterChangeHandler = this._filterChangeHandler.bind(this);
     this._sortChangeHandler = this._sortChangeHandler.bind(this);
+    this._commentChangeHandler = this._commentChangeHandler.bind(this);
+    this._popupOpenHandler = this._popupOpenHandler.bind(this);
 
     this._showedCardControllers = [];
     this._showedExtraCardControllers = [];
     this._prevCardsCount = 0;
+    this._openedPopup = null;
 
     this._showingMainFilmsCount = CardCount.MAIN_FILM;
     this._oldDetailsComponent = null;
@@ -106,7 +108,7 @@ export default class PageController {
 
   _renderCards(container, cards) {
     return cards.map((card) => {
-      const movieController = new MovieController(container, this._dataChangeHandler, this._viewChangeHandler, this._api);
+      const movieController = new MovieController(container, this._dataChangeHandler, this._viewChangeHandler, this._commentChangeHandler, this._popupOpenHandler, this._api);
       movieController.render(card);
 
       return movieController;
@@ -119,6 +121,16 @@ export default class PageController {
 
     this._showedExtraCardControllers.forEach((movieController) => movieController.destroy());
     this._showedExtraCardControllers = [];
+  }
+
+  _commentChangeHandler(movieController, card, newComment) {
+    this._api.createComment(card.id, newComment)
+      .then((newCard) => {
+        this._dataChangeHandler(movieController, card, newCard);
+      })
+      .catch(() => {
+        movieController.commentSendingError();
+      });
   }
 
   _dataChangeHandler(movieController, oldData, newData) {
@@ -161,6 +173,13 @@ export default class PageController {
 
     this._renderMainCards();
     this._renderLoadMoreButton();
+  }
+
+  _popupOpenHandler(movieComponent) {
+    if (this._openedPopup) {
+      this._openedPopup.removePopup();
+    }
+    this._openedPopup = movieComponent;
   }
 
   _renderTopRatedFilms() {

@@ -7,6 +7,7 @@ export const TimeToken = {
   TIME: `H[h] m[m]`,
   DATE: `DD MMMM YYYY`,
   COMMENT: `YYYY/MM/DD HH:MM`,
+  YEAR: `YYYY`
 };
 
 export const getFormattedTime = (date, timeToken) => {

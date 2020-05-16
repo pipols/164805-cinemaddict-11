@@ -1,31 +1,53 @@
-import StatisticComponent from '../components/statistic';
+import StatisticControls from '../components/statistic-controls';
+import StatisticChart from '../components/statistic-chart';
 import {render, replace} from '../utils/render';
+import {getCardsByChartFilter} from '../utils/filter';
 
 export default class Statistic {
   constructor(container, moviesModel) {
     this._container = container;
     this._moviesModel = moviesModel;
+    this.cards = [];
 
-    this._statisticComponent = null;
+    this._statisticChart = null;
+    this._statisticControls = null;
 
+    this._statisticInputHandler = this._statisticInputHandler.bind(this);
     this._dataChangeHandler = this._dataChangeHandler.bind(this);
     this._moviesModel.setDataChangeHandler(this._dataChangeHandler);
   }
 
   render() {
     const container = this._container;
-    const allCards = this._moviesModel.getCardsAll();
+    this.cards = this._moviesModel.getCardsAll();
 
-    const oldComponent = this._statisticComponent;
+    const oldComponent = this._statisticChart;
 
-    this._statisticComponent = new StatisticComponent(allCards);
-    this._statisticComponent.renderChart();
+    this._statisticControls = new StatisticControls();
+    this._statisticChart = new StatisticChart(this.cards);
+    this._statisticChart.renderChart();
+
+    this._statisticControls.setFilterInputHandler(this._statisticInputHandler);
+
+    const chartContainer = this._statisticControls.getElement();
+    render(container, this._statisticControls);
 
     if (oldComponent) {
-      replace(this._statisticComponent, oldComponent);
+      replace(this._statisticChart, oldComponent);
     } else {
-      render(container, this._statisticComponent);
+      render(chartContainer, this._statisticChart);
     }
+
+  }
+
+  _statisticInputHandler(evt) {
+    const filterValue = evt.target.value;
+    const cards = getCardsByChartFilter(this.cards, filterValue);
+    const oldComponent = this._statisticChart;
+    this._statisticChart = new StatisticChart(cards);
+    this._statisticChart.renderChart();
+
+    replace(this._statisticChart, oldComponent);
   }
 
   _dataChangeHandler() {
@@ -33,11 +55,11 @@ export default class Statistic {
   }
 
   hide() {
-    this._statisticComponent.hide();
+    this._statisticControls.hide();
   }
 
   show() {
-    this._statisticComponent.show();
+    this._statisticControls.show();
   }
 
 }

@@ -117,8 +117,8 @@ const createFilmDetailsElement = (card) => {
         </div>
 
         <section class="film-details__controls">
-          <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isWatchlist ? `checked` : ``}>
-          <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
+          <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlists" name="watchlist" ${isWatchlist ? `checked` : ``}>
+          <label for="watchlists" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
           <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isWatched ? `checked` : ``}>
           <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
@@ -166,6 +166,8 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._closeButtonClickHandler = null;
     this._escKeydownHandler = null;
     this._formChangeHandler = null;
+
+    this.commentField = this.getElement().querySelector(`.film-details__comment-input`);
   }
 
   getTemplate() {
@@ -183,11 +185,9 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._watchlistChangeHandler = handler;
     this.getElement()
       .querySelector(`input[name=watchlist]`)
-      .addEventListener(`change`, (evt) => {
-        evt.preventDefault();
-        this._watchlistChangeHandler();
-      });
+      .addEventListener(`change`, this._watchlistChangeHandler);
   }
+
 
   setWatchedChangeHandler(handler) {
     this._watchedChangeHandler = handler;
@@ -217,7 +217,38 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._formChangeHandler = handler;
     this.getElement()
       .querySelector(`.film-details__inner`)
-      .addEventListener(`keydown`, handler);
+      .addEventListener(`keydown`, (evt) => {
+        handler(evt, this._card);
+      });
+  }
+
+  getData() {
+    const form = this.getElement().querySelector(`.film-details__inner`);
+    return new FormData(form);
+  }
+
+  setFormLock() {
+    this.getElement()
+      .querySelectorAll(`.film-details__emoji-item`)
+      .forEach((elem) => elem.setAttribute(`disabled`, `disabled`));
+
+    this.commentField.setAttribute(`disabled`, `disabled`);
+  }
+
+  setFormUnlock() {
+    this.getElement()
+      .querySelectorAll(`.film-details__emoji-item`)
+      .forEach((elem) => elem.removeAttribute(`disabled`, `disabled`));
+
+    this.commentField.removeAttribute(`disabled`, `disabled`);
+  }
+
+  setCommentFieldError() {
+    this.commentField.style.border = `1px solid red`;
+  }
+
+  deleteCommentFieldError() {
+    this.commentField.style.border = `1px solid #979797`;
   }
 
   recoveryListeners() {

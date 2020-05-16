@@ -6,7 +6,7 @@ import MoviesModel from './models/movies';
 import API from './api';
 
 
-const TOKEN = `Basic er883dlkvzbddsaqw`;
+const TOKEN = `Basic er88s3sdlkvzbddsaqw`;
 const API_URL = `https://11.ecmascript.pages.academy/cinemaddict`;
 
 const siteMainElement = document.querySelector(`main`);
@@ -44,7 +44,3 @@ api.getMovies()
     moviesModel.setCards(movies);
     renderPage();
   });
-
-// сделать компонент(контроллер?) комментариев
-// а нужен ли _onViewChange?
-// починить releaseDate в MovieAdapter

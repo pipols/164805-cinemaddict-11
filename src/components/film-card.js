@@ -1,4 +1,4 @@
-import {getLimitString, getFilmDuration} from '../utils/common';
+import {getLimitString, getFilmDuration, TimeToken, getFormattedTime} from '../utils/common';
 import AbstractSmartComponent from './abstract-smart-component';
 
 const MAX_LENGTH_DESCRIPTION = 139;
@@ -13,9 +13,9 @@ const createFilmCardElement = (card) => {
         <h3 class="film-card__title">${title}</h3>
         <p class="film-card__rating">${rate}</p>
         <p class="film-card__info">
-          <span class="film-card__year">${releaseDate}</span>
+          <span class="film-card__year">${getFormattedTime(releaseDate, TimeToken.YEAR)}</span>
           <span class="film-card__duration">${getFilmDuration(duration)}</span>
-          <span class="film-card__genre">${genre[0]}</span>
+          <span class="film-card__genre">${genre.length ? genre[0] : ``}</span>
         </p>
         <img src="./${poster}" alt="${title}" class="film-card__poster">
         <p class="film-card__description">${getLimitDescription}</p>
@@ -67,10 +67,7 @@ export default class Card extends AbstractSmartComponent {
     this._watchlistHandler = handler;
     this.getElement()
       .querySelector(`.film-card__controls-item--add-to-watchlist`)
-      .addEventListener(`click`, (evt) => {
-        evt.preventDefault();
-        this._watchlistHandler();
-      });
+      .addEventListener(`click`, this._watchlistHandler);
   }
 
   setWatchedButtonClickHandler(handler) {
