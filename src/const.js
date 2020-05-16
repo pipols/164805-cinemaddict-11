@@ -13,7 +13,6 @@ export const MONTH_NAMES = [
   `December`
 ];
 
-// all rename
 export const CardCount = {
   MAIN_FILM: 5,
   RATED_FILM: 2,
@@ -44,4 +43,12 @@ export const FilterType = {
   WATCHLIST: `watchlist`,
   HISTORY: `history`,
   FAVORITES: `favorites`
+};
+
+export const FilterChartType = {
+  ALL: `all-time`,
+  TODAY: `today`,
+  WEEK: `week`,
+  MONTH: `month`,
+  YEAR: `year`
 };

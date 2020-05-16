@@ -44,7 +44,3 @@ api.getMovies()
     moviesModel.setCards(movies);
     renderPage();
   });
-
-// сделать компонент(контроллер?) комментариев
-// а нужен ли _onViewChange?
-// починить releaseDate в MovieAdapter

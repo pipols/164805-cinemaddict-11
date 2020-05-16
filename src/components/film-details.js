@@ -117,8 +117,8 @@ const createFilmDetailsElement = (card) => {
         </div>
 
         <section class="film-details__controls">
-          <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isWatchlist ? `checked` : ``}>
-          <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
+          <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlists" name="watchlist" ${isWatchlist ? `checked` : ``}>
+          <label for="watchlists" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
           <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isWatched ? `checked` : ``}>
           <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
@@ -167,7 +167,6 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._escKeydownHandler = null;
     this._formChangeHandler = null;
 
-    // this._externalData = DefaultData;
     this.commentField = this.getElement().querySelector(`.film-details__comment-input`);
   }
 
@@ -186,11 +185,9 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._watchlistChangeHandler = handler;
     this.getElement()
       .querySelector(`input[name=watchlist]`)
-      .addEventListener(`change`, (evt) => {
-        evt.preventDefault();
-        this._watchlistChangeHandler();
-      });
+      .addEventListener(`input`, this._watchlistChangeHandler);
   }
+
 
   setWatchedChangeHandler(handler) {
     this._watchedChangeHandler = handler;

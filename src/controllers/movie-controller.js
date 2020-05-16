@@ -3,7 +3,6 @@ import FilmDetailsComponent from '../components/film-details';
 import CommentComponent from '../components/comment';
 import MovieAdapter from '../adapters/movie';
 import {render, replace, remove} from '../utils/render';
-// import {extend} from '../utils/common';
 import {KeyCode} from '../const';
 import {encode} from 'he';
 
@@ -41,7 +40,6 @@ export default class MovieController {
     this._cardClickHandler = this._cardClickHandler.bind(this);
     this._deleteCommentButtonHandler = this._deleteCommentButtonHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
-    // this.shake = this.shake.bind(this);
   }
 
   render(card) {
@@ -58,7 +56,8 @@ export default class MovieController {
     this._cardComponent.setCardTitleClickHandler(this._cardClickHandler);
     this._cardComponent.setCardCommentsClickHandler(this._cardClickHandler);
 
-    this._cardComponent.setWatchlistButtonClickHandler(() => {
+    this._cardComponent.setWatchlistButtonClickHandler((evt) => {
+      evt.preventDefault();
       const newCard = MovieAdapter.clone(this._card);
       newCard.isWatchlist = !newCard.isWatchlist;
 
@@ -81,7 +80,8 @@ export default class MovieController {
       this._onDataChange(this, this._card, newCard);
     });
 
-    this._filmDetailsComponent.setWatchlistChangeHandler(() => {
+    this._filmDetailsComponent.setWatchlistChangeHandler((evt) => {
+      evt.preventDefault();
       const newCard = MovieAdapter.clone(this._card);
       newCard.isWatchlist = !newCard.isWatchlist;
 
@@ -213,17 +213,9 @@ export default class MovieController {
     this._filmDetailsComponent.getElement().classList.add(`shake`);
     this._cardComponent.getElement().classList.add(`shake`);
 
-    // const position = this._filmDetailsComponent.getElement().scrollTop;
-    // console.log(position);
     setTimeout(() => {
       this._filmDetailsComponent.getElement().classList.remove(`shake`);
       this._cardComponent.getElement().classList.remove(`shake`);
-      // this._filmDetailsComponent.getElement().scrollTo(0, position);
-      // window.scrollTo(0, 200);
-      // this._taskEditComponent.setData({
-      //   saveButtonText: `Save`,
-      //   deleteButtonText: `Delete`,
-      // });
     }, SHAKE_ANIMATION_TIMEOUT);
   }
 

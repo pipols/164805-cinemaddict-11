@@ -4,7 +4,6 @@ import MainFilmsComponent from '../components/main-films';
 import ExtraFilmsComponent from '../components/extra-films';
 import FooterStatisticComponent from '../components/footer-statistic';
 import LoadMoreButtonComponent from '../components/load-more-button';
-// import StatisticComponent from '../components/statistic';
 
 import MovieController from './movie-controller';
 

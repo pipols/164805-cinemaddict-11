@@ -67,10 +67,7 @@ export default class Card extends AbstractSmartComponent {
     this._watchlistHandler = handler;
     this.getElement()
       .querySelector(`.film-card__controls-item--add-to-watchlist`)
-      .addEventListener(`click`, (evt) => {
-        evt.preventDefault();
-        this._watchlistHandler();
-      });
+      .addEventListener(`click`, this._watchlistHandler);
   }
 
   setWatchedButtonClickHandler(handler) {
