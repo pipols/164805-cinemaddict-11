@@ -185,7 +185,7 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._watchlistChangeHandler = handler;
     this.getElement()
       .querySelector(`input[name=watchlist]`)
-      .addEventListener(`input`, this._watchlistChangeHandler);
+      .addEventListener(`change`, this._watchlistChangeHandler);
   }
 
 
