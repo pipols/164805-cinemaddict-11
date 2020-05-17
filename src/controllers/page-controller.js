@@ -90,10 +90,10 @@ export default class PageController {
 
     if (this._showingMainFilmsCount >= cards.length) {
       return;
-    } else {
-      render(this._mainFilmsComponent.getElement(), this._loadMoreButtonComponent);
-      this._loadMoreButtonComponent.setClickHandler(this._loadMoreClickHandler);
     }
+
+    render(this._mainFilmsComponent.getElement(), this._loadMoreButtonComponent);
+    this._loadMoreButtonComponent.setClickHandler(this._loadMoreClickHandler);
   }
 
   _renderExtraCards(cards, title, component) {

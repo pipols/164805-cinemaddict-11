@@ -43,9 +43,9 @@ export default class Movies {
       return [];
     } else if (isSameValues(cards, `rate`)) {
       return shuffleArray(cards).slice(0, CardCount.RATED_FILM);
-    } else {
-      return sortRatedCards(cards).slice(0, CardCount.RATED_FILM);
     }
+
+    return sortRatedCards(cards).slice(0, CardCount.RATED_FILM);
   }
 
   getMostCommentedCards() {
@@ -55,9 +55,9 @@ export default class Movies {
       return [];
     } else if (isSameCountComments(cards)) {
       return shuffleArray(cards).slice(0, CardCount.MOST_COMMENTED_FILM);
-    } else {
-      return sortMostCommentedCards(cards).slice(0, CardCount.MOST_COMMENTED_FILM);
     }
+
+    return sortMostCommentedCards(cards).slice(0, CardCount.MOST_COMMENTED_FILM);
   }
 
   updateCard(oldFilmId, film) {
