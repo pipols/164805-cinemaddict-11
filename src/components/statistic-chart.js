@@ -39,10 +39,10 @@ const getUniqueGenres = (cards) => {
 
 const getCountElements = (cards) => {
   const uniqCards = getUniqueGenres(cards);
-  const getConcatCard = cards.reduce((acc, card) => acc.concat(card.genre), []);
+  const concatCards = cards.reduce((acc, card) => acc.concat(card.genre), []);
 
   return uniqCards.map((genre) => {
-    return getConcatCard.filter((elem) => elem === genre).length;
+    return concatCards.filter((elem) => elem === genre).length;
   });
 };
 
