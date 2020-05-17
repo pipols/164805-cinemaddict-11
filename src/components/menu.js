@@ -41,6 +41,11 @@ export default class Menu extends AbstractComponent {
   setFilterChangeHandler(handler) {
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
+
+      if (evt.target.tagName !== `A`) {
+        return undefined;
+      }
+
       const activeLink = this.getElement().querySelector(`.${ACTIVE_CLASS}`);
       const id = evt.target.id;
 
