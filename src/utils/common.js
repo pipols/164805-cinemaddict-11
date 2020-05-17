@@ -63,8 +63,8 @@ export const getRandomIntegerNumber = (min, max) => {
   return min + Math.floor(max * Math.random());
 };
 
-export const shuffleArray = ([...array]) => {
-  let currentIndex = array.length;
+export const shuffleArray = ([...items]) => {
+  let currentIndex = items.length;
   let temporaryValue;
   let randomIndex;
 
@@ -72,14 +72,14 @@ export const shuffleArray = ([...array]) => {
     randomIndex = getRandomIntegerNumber(0, currentIndex);
     currentIndex -= 1;
 
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
+    temporaryValue = items[currentIndex];
+    items[currentIndex] = items[randomIndex];
+    items[randomIndex] = temporaryValue;
   }
-  return array;
+  return items;
 };
 
-export const isSameValues = (array, key) => array.every((it) => it[key] === array[0][key]);
+export const isSameValues = (items, key) => items.every((it) => it[key] === items[0][key]);
 
 export const isSameCountComments = (cards) => cards.every((card) => card.commentsId.length === cards[0].commentsId.length);
 
