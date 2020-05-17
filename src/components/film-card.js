@@ -28,7 +28,7 @@ const createFilmCardElement = (card) => {
       </article>`);
 };
 
-export default class Card extends AbstractSmartComponent {
+export default class FilmCard extends AbstractSmartComponent {
   constructor(card) {
     super();
     this._card = card;

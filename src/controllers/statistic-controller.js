@@ -3,7 +3,7 @@ import StatisticChart from '../components/statistic-chart';
 import {render, replace} from '../utils/render';
 import {getCardsByChartFilter} from '../utils/filter';
 
-export default class Statistic {
+export default class StatisticController {
   constructor(container, moviesModel) {
     this._container = container;
     this._moviesModel = moviesModel;
