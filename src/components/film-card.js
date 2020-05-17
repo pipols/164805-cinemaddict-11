@@ -4,6 +4,8 @@ import AbstractSmartComponent from './abstract-smart-component';
 const MAX_LENGTH_DESCRIPTION = 139;
 const ACTIVE_BUTTON = `film-card__controls-item--active`;
 
+const createFilmGenre = (genre) => `<span class="film-card__genre">${genre}</span>`;
+
 const createFilmCardElement = (card) => {
   const {title, poster, description, commentsId, genre, releaseDate, rate, duration, isWatchlist, isWatched, isFavorite} = card;
   const getLimitDescription = getLimitString(description, MAX_LENGTH_DESCRIPTION);
@@ -15,7 +17,7 @@ const createFilmCardElement = (card) => {
         <p class="film-card__info">
           <span class="film-card__year">${getFormattedTime(releaseDate, TimeToken.YEAR)}</span>
           <span class="film-card__duration">${getFilmDuration(duration)}</span>
-          <span class="film-card__genre">${genre.length ? genre[0] : ``}</span>
+          ${genre.map(createFilmGenre).join(` `)}
         </p>
         <img src="./${poster}" alt="${title}" class="film-card__poster">
         <p class="film-card__description">${getLimitDescription}</p>
