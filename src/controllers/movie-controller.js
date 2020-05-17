@@ -104,7 +104,6 @@ export default class MovieController {
       this._onDataChange(this, this._card, newCard);
     });
 
-    this._filmDetailsComponent.setCloseButtonClickHandler(this._closeButtonClickHandler);
     this._filmDetailsComponent.setEmojiChangeHandler();
 
     this._filmDetailsComponent.setFormSubmitHandler(this._formSubmitHandler);
@@ -134,6 +133,7 @@ export default class MovieController {
     this._onOpenedPopup(this);
 
     render(siteBodyElement, this._filmDetailsComponent);
+    this._filmDetailsComponent.setCloseButtonClickHandler(this._closeButtonClickHandler);
     document.addEventListener(`keydown`, this._escKeydownHandler);
     if (!this._isCommentsRender) {
       this._renderComments(this._card.comments);
