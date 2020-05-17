@@ -33,6 +33,10 @@ export default class FilterController {
     }
   }
 
+  getFilterComponent() {
+    return this._menuComponent;
+  }
+
   _filterChangeHandler(filterType) {
     this._moviesModel.setFilter(filterType);
     this._activeFilterType = filterType;
@@ -40,10 +44,6 @@ export default class FilterController {
 
   _dataChangeHandler() {
     this.render();
-  }
-
-  getFilterComponent() {
-    return this._menuComponent;
   }
 
 }

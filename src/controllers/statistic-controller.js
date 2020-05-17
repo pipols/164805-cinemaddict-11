@@ -40,6 +40,14 @@ export default class StatisticController {
 
   }
 
+  hide() {
+    this._statisticControls.hide();
+  }
+
+  show() {
+    this._statisticControls.show();
+  }
+
   _statisticInputHandler(evt) {
     const filterValue = evt.target.value;
     const cards = getCardsByChartFilter(this.cards, filterValue);
@@ -53,13 +61,4 @@ export default class StatisticController {
   _dataChangeHandler() {
     this.render();
   }
-
-  hide() {
-    this._statisticControls.hide();
-  }
-
-  show() {
-    this._statisticControls.show();
-  }
-
 }

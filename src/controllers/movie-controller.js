@@ -129,6 +129,22 @@ export default class MovieController {
     this._isCommentsRender = false;
   }
 
+  commentSendingError() {
+    this.shake();
+    this._filmDetailsComponent.setFormUnlock();
+    this._filmDetailsComponent.setCommentFieldError();
+  }
+
+  shake() {
+    this._filmDetailsComponent.getElement().classList.add(`shake`);
+    this._cardComponent.getElement().classList.add(`shake`);
+
+    setTimeout(() => {
+      this._filmDetailsComponent.getElement().classList.remove(`shake`);
+      this._cardComponent.getElement().classList.remove(`shake`);
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
+
   _renderPopup() {
     this._onOpenedPopup(this);
 
@@ -201,22 +217,6 @@ export default class MovieController {
       commentComponent.setDeleteCommentButtonHandler(this._deleteCommentButtonHandler);
       render(container, commentComponent);
     });
-  }
-
-  commentSendingError() {
-    this.shake();
-    this._filmDetailsComponent.setFormUnlock();
-    this._filmDetailsComponent.setCommentFieldError();
-  }
-
-  shake() {
-    this._filmDetailsComponent.getElement().classList.add(`shake`);
-    this._cardComponent.getElement().classList.add(`shake`);
-
-    setTimeout(() => {
-      this._filmDetailsComponent.getElement().classList.remove(`shake`);
-      this._cardComponent.getElement().classList.remove(`shake`);
-    }, SHAKE_ANIMATION_TIMEOUT);
   }
 
 }

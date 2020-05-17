@@ -68,6 +68,15 @@ export default class PageController {
     this._renderLoadMoreButton();
   }
 
+
+  hide() {
+    this._filmListComponent.hide();
+  }
+
+  show() {
+    this._filmListComponent.show();
+  }
+
   _loadMoreClickHandler() {
     this._showingMainFilmsCount = this._showingMainFilmsCount + CardCount.BY_BUTTON;
     this._renderMainCards();
@@ -213,14 +222,6 @@ export default class PageController {
     } else {
       this._mainFilmsComponent.setTitle(FilmsListTitle.MAIN_FILM);
     }
-  }
-
-  hide() {
-    this._filmListComponent.hide();
-  }
-
-  show() {
-    this._filmListComponent.show();
   }
 
 }

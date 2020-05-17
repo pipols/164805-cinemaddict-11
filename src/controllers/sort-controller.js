@@ -27,17 +27,17 @@ export default class SortController {
     }
   }
 
-  _sortChangeHandler(sortType) {
-    this._moviesModel.setSort(sortType);
-    this._activeSortType = sortType;
-  }
-
   show() {
     this._sortComponent.show();
   }
 
   hide() {
     this._sortComponent.hide();
+  }
+
+  _sortChangeHandler(sortType) {
+    this._moviesModel.setSort(sortType);
+    this._activeSortType = sortType;
   }
 
 }
