@@ -22,10 +22,9 @@ const parseFormData = (formData) => {
 };
 
 export default class MovieController {
-  constructor(container, onDataChange, onViewChange, onCommentChange, onOpenedPopup, api) {
+  constructor(container, onDataChange, onCommentChange, onOpenedPopup, api) {
     this._container = container;
     this._onDataChange = onDataChange;
-    this._onViewChange = onViewChange;
     this._onCommentChange = onCommentChange;
     this._onOpenedPopup = onOpenedPopup;
     this._api = api;
@@ -49,6 +48,16 @@ export default class MovieController {
     this._card = card;
     this._cardComponent = new CardComponent(card);
     this._filmDetailsComponent = new FilmDetailsComponent(card);
+
+
+    if (oldFilmDetailsComponent && oldCardComponent) {
+      replace(this._cardComponent, oldCardComponent);
+      replace(this._filmDetailsComponent, oldFilmDetailsComponent);
+      this._setPopupListeners();
+    } else {
+      render(this._container, this._cardComponent);
+    }
+
 
     this._isCommentsRender = false;
 
@@ -80,40 +89,6 @@ export default class MovieController {
       this._onDataChange(this, this._card, newCard);
     });
 
-    this._filmDetailsComponent.setWatchlistChangeHandler((evt) => {
-      evt.preventDefault();
-      const newCard = MovieAdapter.clone(this._card);
-      newCard.isWatchlist = !newCard.isWatchlist;
-
-      this._onDataChange(this, this._card, newCard);
-    });
-
-    this._filmDetailsComponent.setWatchedChangeHandler((evt) => {
-      evt.preventDefault();
-      const newCard = MovieAdapter.clone(this._card);
-      newCard.isWatched = !newCard.isWatched;
-
-      this._onDataChange(this, this._card, newCard);
-    });
-
-    this._filmDetailsComponent.setFavoriteChangeHandler((evt) => {
-      evt.preventDefault();
-      const newCard = MovieAdapter.clone(this._card);
-      newCard.isFavorite = !newCard.isFavorite;
-
-      this._onDataChange(this, this._card, newCard);
-    });
-
-    this._filmDetailsComponent.setEmojiChangeHandler();
-
-    this._filmDetailsComponent.setFormSubmitHandler(this._formSubmitHandler);
-
-    if (oldFilmDetailsComponent && oldCardComponent) {
-      replace(this._cardComponent, oldCardComponent);
-      replace(this._filmDetailsComponent, oldFilmDetailsComponent);
-    } else {
-      render(this._container, this._cardComponent);
-    }
 
     this._loadComments();
   }
@@ -149,8 +124,9 @@ export default class MovieController {
     this._onOpenedPopup(this);
 
     render(siteBodyElement, this._filmDetailsComponent);
-    this._filmDetailsComponent.setCloseButtonClickHandler(this._closeButtonClickHandler);
+    this._setPopupListeners();
     document.addEventListener(`keydown`, this._escKeydownHandler);
+
     if (!this._isCommentsRender) {
       this._renderComments(this._card.comments);
     }
@@ -217,6 +193,39 @@ export default class MovieController {
       commentComponent.setDeleteCommentButtonHandler(this._deleteCommentButtonHandler);
       render(container, commentComponent);
     });
+  }
+
+  _setPopupListeners() {
+    this._filmDetailsComponent.setWatchlistChangeHandler((evt) => {
+      evt.preventDefault();
+      const newCard = MovieAdapter.clone(this._card);
+      newCard.isWatchlist = !newCard.isWatchlist;
+
+      this._onDataChange(this, this._card, newCard);
+    });
+
+    this._filmDetailsComponent.setWatchedChangeHandler((evt) => {
+      evt.preventDefault();
+      const newCard = MovieAdapter.clone(this._card);
+      newCard.isWatched = !newCard.isWatched;
+
+      this._onDataChange(this, this._card, newCard);
+    });
+
+    this._filmDetailsComponent.setFavoriteChangeHandler((evt) => {
+      evt.preventDefault();
+      const newCard = MovieAdapter.clone(this._card);
+      newCard.isFavorite = !newCard.isFavorite;
+
+      this._onDataChange(this, this._card, newCard);
+    });
+
+    this._filmDetailsComponent.setEmojiChangeHandler();
+
+    this._filmDetailsComponent.setFormSubmitHandler(this._formSubmitHandler);
+
+    this._filmDetailsComponent.setCloseButtonClickHandler(this._closeButtonClickHandler);
+
   }
 
 }

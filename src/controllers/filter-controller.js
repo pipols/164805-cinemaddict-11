@@ -32,9 +32,14 @@ export default class FilterController {
       render(container, this._menuComponent);
     }
   }
-
+  // del
   getFilterComponent() {
     return this._menuComponent;
+  }
+
+  setFilterChangeHandler(handler) {
+    this._menuComponent.setFilterChangeHandler(handler);
+    this._filterItemClickHandler = handler;
   }
 
   _filterChangeHandler(filterType) {
@@ -44,6 +49,13 @@ export default class FilterController {
 
   _dataChangeHandler() {
     this.render();
+    this._recoveryListeners();
+  }
+
+  _recoveryListeners() {
+    this._menuComponent.setFilterChangeHandler(this._filterItemClickHandler);
+
+    // this.setFilterChangeHandler(this._filterItemClickHandler);
   }
 
 }

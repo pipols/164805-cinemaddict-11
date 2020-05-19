@@ -15,14 +15,6 @@ export default class Movies {
     this._sortChangeHandlers = [];
   }
 
-  loadCards(cb) {
-    this._api.getMovies()
-      .then((movies) => {
-        this.setCards(movies);
-        cb();
-      });
-  }
-
   setCards(cards) {
     this._cards = Array.from(cards);
   }

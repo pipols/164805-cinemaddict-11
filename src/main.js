@@ -8,6 +8,18 @@ import API from './api';
 
 const TOKEN = `Basic er88s3sdlkvzbddsaqw`;
 const API_URL = `https://11.ecmascript.pages.academy/cinemaddict`;
+// handler rename
+const changeMenu = (filter) => {
+  if (!filter) {
+    pageController.hide();
+    sortController.hide();
+    statisticController.show();
+  } else {
+    pageController.show();
+    sortController.show();
+    statisticController.hide();
+  }
+};
 
 const siteMainElement = document.querySelector(`main`);
 const api = new API(API_URL, TOKEN);
@@ -24,19 +36,7 @@ const renderPage = () => {
   pageController.render();
   statisticController.render();
 
-  const filterComponent = filterController.getFilterComponent();
-
-  filterComponent.setFilterChangeHandler((filter) => {
-    if (!filter) {
-      pageController.hide();
-      sortController.hide();
-      statisticController.show();
-    } else {
-      pageController.show();
-      sortController.show();
-      statisticController.hide();
-    }
-  });
+  filterController.setFilterChangeHandler(changeMenu);
 };
 
 api.getMovies()

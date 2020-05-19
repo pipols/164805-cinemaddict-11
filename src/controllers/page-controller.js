@@ -29,7 +29,6 @@ export default class PageController {
     this._mainFilmsComponent = new MainFilmsComponent();
 
     this._dataChangeHandler = this._dataChangeHandler.bind(this);
-    this._viewChangeHandler = this._viewChangeHandler.bind(this);
     this._loadMoreClickHandler = this._loadMoreClickHandler.bind(this);
     this._filterChangeHandler = this._filterChangeHandler.bind(this);
     this._sortChangeHandler = this._sortChangeHandler.bind(this);
@@ -117,7 +116,7 @@ export default class PageController {
 
   _renderCards(container, cards) {
     return cards.map((card) => {
-      const movieController = new MovieController(container, this._dataChangeHandler, this._viewChangeHandler, this._commentChangeHandler, this._popupOpenHandler, this._api);
+      const movieController = new MovieController(container, this._dataChangeHandler, this._commentChangeHandler, this._popupOpenHandler, this._api);
       movieController.render(card);
 
       return movieController;
@@ -151,15 +150,6 @@ export default class PageController {
           movieController.render(movie);
         }
       });
-  }
-
-  _viewChangeHandler(filmDetailsComponent) {
-    if (!this._oldDetailsComponent) {
-      this._oldDetailsComponent = filmDetailsComponent.getElement();
-    } else {
-      this._oldDetailsComponent.remove();
-      this._oldDetailsComponent = filmDetailsComponent.getElement();
-    }
   }
 
   _filterChangeHandler() {

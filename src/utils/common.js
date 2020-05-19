@@ -53,12 +53,6 @@ export const getLimitString = (string, maxLength, lastSymbol = `...`) => {
     : string;
 };
 
-export const getTimeFromMins = (mins) => {
-  const hours = Math.trunc(mins / 60);
-  const minutes = mins % 60;
-  return `${hours}h ${minutes}m`;
-};
-
 export const getRandomIntegerNumber = (min, max) => {
   return min + Math.floor(max * Math.random());
 };
