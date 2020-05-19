@@ -20,7 +20,6 @@ export default class StatisticController {
   render() {
     const container = this._container;
     this.cards = this._moviesModel.getCardsAll();
-    const oldStatisticChart = this._statisticChart;
     const oldStatisticControls = this._statisticControls;
 
     this._statisticControls = new StatisticControls();
@@ -30,14 +29,14 @@ export default class StatisticController {
     this._statisticChart.renderChart();
 
     const chartContainer = this._statisticControls.getElement();
-    if (oldStatisticChart && oldStatisticControls) {
+
+    if (oldStatisticControls) {
       replace(this._statisticControls, oldStatisticControls);
-      replace(this._statisticChart, oldStatisticChart);
     } else {
       render(container, this._statisticControls);
-      render(chartContainer, this._statisticChart);
     }
 
+    render(chartContainer, this._statisticChart);
   }
 
   hide() {
@@ -58,12 +57,7 @@ export default class StatisticController {
     replace(this._statisticChart, oldComponent);
   }
 
-  _recoveryListeners() {
-
-  }
-
   _dataChangeHandler() {
     this.render();
-    this._recoveryListeners();
   }
 }

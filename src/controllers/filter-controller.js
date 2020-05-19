@@ -32,10 +32,6 @@ export default class FilterController {
       render(container, this._menuComponent);
     }
   }
-  // del
-  getFilterComponent() {
-    return this._menuComponent;
-  }
 
   setFilterChangeHandler(handler) {
     this._menuComponent.setFilterChangeHandler(handler);
@@ -54,8 +50,6 @@ export default class FilterController {
 
   _recoveryListeners() {
     this._menuComponent.setFilterChangeHandler(this._filterItemClickHandler);
-
-    // this.setFilterChangeHandler(this._filterItemClickHandler);
   }
 
 }
