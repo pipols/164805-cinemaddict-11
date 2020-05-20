@@ -1,18 +1,3 @@
-export const MONTH_NAMES = [
-  `January`,
-  `February`,
-  `March`,
-  `April`,
-  `May`,
-  `June`,
-  `July`,
-  `August`,
-  `September`,
-  `October`,
-  `November`,
-  `December`
-];
-
 export const CardCount = {
   MAIN_FILM: 5,
   RATED_FILM: 2,

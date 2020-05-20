@@ -9,7 +9,7 @@ import API from './api';
 const TOKEN = `Basic er88s3sdlkvzbddsaqw`;
 const API_URL = `https://11.ecmascript.pages.academy/cinemaddict`;
 // handler rename
-const changeMenu = (filter) => {
+const changeMenuHandler = (filter) => {
   if (!filter) {
     pageController.hide();
     sortController.hide();
@@ -36,7 +36,7 @@ const renderPage = () => {
   pageController.render();
   statisticController.render();
 
-  filterController.setFilterChangeHandler(changeMenu);
+  filterController.setFilterChangeHandler(changeMenuHandler);
 };
 
 api.getMovies()

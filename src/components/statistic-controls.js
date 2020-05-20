@@ -38,12 +38,9 @@ export default class StatisticControls extends AbstractComponent {
   constructor(cards) {
     super();
     this._cards = cards;
-    this.filterInputhandler = null;
   }
 
   setFilterInputHandler(handler) {
-    this.filterInputhandler = handler;
-
     this.getElement()
       .querySelector(`.statistic__filters`)
       .addEventListener(`input`, handler);

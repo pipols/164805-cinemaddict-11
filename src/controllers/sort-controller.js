@@ -1,13 +1,11 @@
 import SortComponent from '../components/sort';
 import {render, replace} from '../utils/render';
-import {SortType} from '../const';
 
 export default class SortController {
   constructor(container, moviesModel) {
     this._container = container;
     this._moviesModel = moviesModel;
 
-    this._activeSortType = SortType.DEFAULT;
     this._sortComponent = null;
 
     this._sortChangeHandler = this._sortChangeHandler.bind(this);
@@ -15,7 +13,7 @@ export default class SortController {
 
   render() {
     const container = this._container;
-    const oldComponent = this._SortComponent;
+    const oldComponent = this._sortComponent;
 
     this._sortComponent = new SortComponent();
     this._sortComponent.setSortChangeHandler(this._sortChangeHandler);
@@ -37,7 +35,6 @@ export default class SortController {
 
   _sortChangeHandler(sortType) {
     this._moviesModel.setSort(sortType);
-    this._activeSortType = sortType;
   }
 
 }
