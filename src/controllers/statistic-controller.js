@@ -22,7 +22,7 @@ export default class StatisticController {
     this.cards = this._moviesModel.getCardsAll();
     const oldStatisticControls = this._statisticControls;
 
-    this._statisticControls = new StatisticControls();
+    this._statisticControls = new StatisticControls(this.cards);
     this._statisticChart = new StatisticChart(this.cards);
 
     this._statisticControls.setFilterInputHandler(this._statisticInputHandler);

@@ -1,11 +1,15 @@
 import AbstractComponent from './abstract-component';
+import {getProfileRating, getPropertyCount} from '../utils/common';
 
-const createStatisticElement = () => {
+const createStatisticElement = (cards) => {
+  const countWatched = getPropertyCount(cards, `isWatched`);
+  const rating = getProfileRating(countWatched);
+
   return `<section class="statistic visually-hidden">
     <p class="statistic__rank">
       Your rank
       <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-      <span class="statistic__rank-label">Sci-Fighter</span>
+      <span class="statistic__rank-label">${rating}</span>
     </p>
 
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
