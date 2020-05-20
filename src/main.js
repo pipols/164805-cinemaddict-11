@@ -11,13 +11,10 @@ const API_URL = `https://11.ecmascript.pages.academy/cinemaddict`;
 // handler rename
 const changeMenu = (filter) => {
   if (!filter) {
-    console.log(changeMenu);
     pageController.hide();
     sortController.hide();
     statisticController.show();
   } else {
-    console.log(changeMenu);
-
     pageController.show();
     sortController.show();
     statisticController.hide();

@@ -1,5 +1,7 @@
 import AbstractSmartComponent from './abstract-smart-component';
 import {getPropertyCount} from '../utils/common';
+import {getCardsByFilter} from '../utils/filter';
+import {FilterType} from '../const';
 import Chart from 'chart.js';
 import chartDataLabels from 'chartjs-plugin-datalabels';
 
@@ -59,7 +61,7 @@ const createStatisticElement = (cards) => {
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Top genre</h4>
-        <p class="statistic__item-text">${getTopGenre(cards)}</p>
+        <p class="statistic__item-text">${getTopGenre(cards) || ``}</p>
       </li>
     </ul>
 
@@ -71,10 +73,11 @@ const createStatisticElement = (cards) => {
 export default class StatisticChart extends AbstractSmartComponent {
   constructor(cards) {
     super();
-    this._cards = cards;
+    this._cards = getCardsByFilter(cards, FilterType.HISTORY);
   }
 
   getTemplate() {
+
     return createStatisticElement(this._cards);
   }
 
